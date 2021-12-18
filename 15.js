@@ -5,23 +5,30 @@
 
 var content = document.querySelector("pre").innerText;
 
-var content=`1163751742
-1381373672
-2136511328
-3694931569
-7463417111
-1319128137
-1359912421
-3125421639
-1293138521
-2311944581`;
+// var content=`1163751742
+// 1381373672
+// 2136511328
+// 3694931569
+// 7463417111
+// 1319128137
+// 1359912421
+// 3125421639
+// 1293138521
+// 2311944581`;
 
 var input = content
     .trim()
     .split("\n")
     .map(row => row.split("").map(x => parseInt(x)));
 
-
+var part2 = true;
+if (part2) {
+    var a = input.length;
+    var b = input[0].length;
+    input = input.map(row => row.concat(row.map(v => v+1), row.map(v => v+2), row.map(v => v+3), row.map(v => v+4)))
+    input = input.concat(input.map(row => row.map(v => v+1)), input.map(row => row.map(v => v+2)), input.map(row => row.map(v => v+3)), input.map(row => row.map(v => v+4)))
+    input = input.map((row, i) => row.map((v, j) => v > 9 ? v-9 : v))
+}
 
 var dest = [input.length-1, input[0].length-1];
 
@@ -99,6 +106,7 @@ function step() {
         if (eq(latest, dest)) {
             return next;
         }
+        if (next.totalCost > scoreToBeat) continue;
         var key = latest[0] + " " + latest[1];
         if (distCosts[key]?.totalCost < next.totalCost) continue;
         distCosts[key] = next;
