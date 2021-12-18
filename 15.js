@@ -5,21 +5,23 @@
 
 var content = document.querySelector("pre").innerText;
 
-// var content=`1163751742
-// 1381373672
-// 2136511328
-// 3694931569
-// 7463417111
-// 1319128137
-// 1359912421
-// 3125421639
-// 1293138521
-// 2311944581`;
+var content=`1163751742
+1381373672
+2136511328
+3694931569
+7463417111
+1319128137
+1359912421
+3125421639
+1293138521
+2311944581`;
 
 var input = content
     .trim()
     .split("\n")
     .map(row => row.split("").map(x => parseInt(x)));
+
+
 
 var dest = [input.length-1, input[0].length-1];
 
@@ -42,7 +44,7 @@ while (true) {
 }
 scoreToBeat = Math.min(leftDownTotal, rightAcrossTotal, diagTotal);
 
-var paths = new PriorityQueue((a,b) => a.totalCost > b.totalCost);
+var paths = new PriorityQueue((a,b) => a.totalCost < b.totalCost);
 paths.push({
     points: [[0,0]],
     totalCost: 0,//input[0][0]
@@ -63,33 +65,45 @@ function eq(a,b) {
     return a[0]==b[0] && a[1]==b[1]
 }
 
-function getOptions(points, point) {
+function getOptions(path) {
+    var points = path.points;
+    var point = points[points.length-1];
     return getAdj(...point).filter(x => !points.some(p => eq(p,x[1])));
 }
 
-function prune(paths) {
-    return Object.values(paths.reduce((map, cur) => {
-        if (cur.totalCost > scoreToBeat) return map;
-        var last = cur.points[cur.points.length-1];
-        var key = last[0] + " " + last[1];
-        var existing = map[key];
-        if (existing === undefined || existing.totalCost > cur.totalCost) {
-            map[key] = cur;
-        }
-        return map;
-    }, {}));
-}
+// function prune(paths) {
+//     return Object.values(paths.reduce((map, cur) => {
+//         if (cur.totalCost > scoreToBeat) return map;
+//         var last = cur.points[cur.points.length-1];
+//         var key = last[0] + " " + last[1];
+//         var existing = map[key];
+//         if (existing === undefined || existing.totalCost > cur.totalCost) {
+//             map[key] = cur;
+//         }
+//         return map;
+//     }, {}));
+// }
+
+var distCosts = {};
 
 function step() {
-    paths=prune(paths);
-    path = paths.shift();
-    lastPoint = path.points[path.points.length-1];
-    getOptions(path.points, lastPoint)
+    // paths=prune(paths);
+    path = paths.pop();
+    var newPaths = getOptions(path)
         .map(point => ({
             points: [...path.points, point[1]],
             totalCost: path.totalCost + point[0],
-        }))
-        .forEach(v => paths.push(v));
+        }));
+    for (const next of newPaths) {
+        var latest = next.points[next.points.length-1];
+        if (eq(latest, dest)) {
+            return next;
+        }
+        var key = latest[0] + " " + latest[1];
+        if (distCosts[key]?.totalCost < next.totalCost) continue;
+        distCosts[key] = next;
+        paths.push(next);
+    }
 }
 
 function sleep(time) {
@@ -99,15 +113,12 @@ function sleep(time) {
 var go=true;
 async function main() {
     for (var i=0;go; i++) {
-        if (i%100==0) {
-            console.log("Step",i,paths.length);
+        if (i%10000==0) {
+            console.log("Step",i,paths.size());
             await sleep(1);
         }
-        if (i%100==0) {
-            paths.sort((a,b) => a.totalCost - b.totalCost);
-        }
-        step();
-        var win = paths.find(p =>  eq(p.points[p.points.length-1], dest));
+        var win = step();
+        // var win = paths.find(p =>  eq(p.points[p.points.length-1], dest));
         if (win !== undefined) break;
     }
     if (win !== undefined)
