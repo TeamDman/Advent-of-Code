@@ -179,11 +179,11 @@ tbvdcsjsvmxtshv3fourseven4kmxvvfour9
         ];
 
         // Step 3 & 5: Generate Random Prefix and Suffix
-        let prefix = generate_random_string(5, &words);
-        let suffix = generate_random_string(5, &words);
+        let prefix = format!("{}z", generate_random_string(5, &words));
+        let suffix = format!("z{}",generate_random_string(5, &words));
 
         // Step 4: Generate Filler
-        let filler = generate_random_string(3, &words);
+        let filler = format!("z{}z", generate_random_string(3, &words));
 
         // Combine all parts
         (
@@ -198,13 +198,23 @@ tbvdcsjsvmxtshv3fourseven4kmxvvfour9
         let mut result = String::new();
         while result.len() < len {
             let char = rng.sample(Alphanumeric) as char;
-            if !char.is_digit(10) && !exclude.contains(&&*char.to_string()) {
+            
+            // Check for any excluded word formation
+            let mut is_excluded = false;
+            for excl in exclude {
+                if format!("{}{}", result, char).contains(excl) {
+                    is_excluded = true;
+                    break;
+                }
+            }
+    
+            if !char.is_digit(10) && !is_excluded {
                 result.push(char);
             }
         }
         result
     }
-
+    
     #[test]
     fn part2_auto_single() {
         println!("BEANS!~");
@@ -217,7 +227,7 @@ tbvdcsjsvmxtshv3fourseven4kmxvvfour9
         let mut total_expected_result = 0;
         let mut combined_test_cases = String::new();
 
-        for _ in 0..10000 {
+        for _ in 0..100000 {
             // Generate 1 to 100 test cases
             let (left, right, test_case) = generate_test_case();
             let expected_result = left * 10 + right;
