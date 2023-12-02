@@ -1,4 +1,4 @@
-mod profiler;
+use common::prelude::*;
 
 fn main() {
     let input = include_str!("./input.txt");
