@@ -93,6 +93,9 @@ fn find_digit(line: &str, words: &Vec<&str>, is_first: bool) -> usize {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rand::distributions::Alphanumeric;
+    use rand::thread_rng;
+    use rand::Rng;
 
     #[test]
     fn part1_answer() {
@@ -141,6 +144,7 @@ zoneight234
         assert_eq!(part2("nineninesevenztfggvfkgkzfcm2"), 92);
         assert_eq!(part2("six"), 66);
         assert_eq!(part2("5six"), 56);
+        assert_eq!(part2("eightwo"), 82);
         assert_eq!(part2("5"), 55);
         assert_eq!(part2("twone"), 21);
         assert_eq!(
@@ -259,5 +263,49 @@ tbvdcsjsvmxtshv3fourseven4kmxvvfour9
     #[test]
     fn part2_fuzz() {
         assert_eq!(part2("GiMdcsix3htwOuduM"), 63);
+    }
+
+    fn part2_bad(input: &str) -> usize {
+        // for each line, which contains numbers, spelled out numbers, and neuther
+        // find the first and last number and concat to make a two digit number
+        // sum the numbers for the result
+    
+        // first, replace each word with the number
+        let words = vec![
+            "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+        ];
+        // the numbers must be replaced in order, consider eightwothree becoming 8wo3
+        let mut input = input.to_string();
+        // find the word with the earliest index, replace, repeat
+        while let Some((word, index)) = words
+            .iter()
+            .map(|word| (word, input.find(word)))
+            .filter(|(_, index)| index.is_some())
+            .min_by_key(|(_, index)| index.unwrap())
+        {
+            let index = index.unwrap();
+            let number = words.iter().position(|w| w == word).unwrap();
+            input.replace_range(index..index + word.len(), &number.to_string());
+        }
+    
+        // println!("new input: {}", input);
+    
+        // now, find the first and last number
+        part1(&input)
+    }
+
+    #[test]
+    fn part2_find_mismatch() {
+        let content = include_str!("./input.txt");
+        // evaluate each line with part2 and part2_bad and list the lines that don't match
+        let mut mismatches = Vec::new();
+        for (i, line) in content.lines().enumerate() {
+            let result = part2(line);
+            let bad_result = part2_bad(line);
+            if result != bad_result {
+                mismatches.push((i, line, result, bad_result));
+            }
+        }
+        println!("mismatches: {:?}", mismatches);
     }
 }
