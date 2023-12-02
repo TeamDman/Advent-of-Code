@@ -53,5 +53,6 @@ macro_rules! time_function {
 
         // Call the logging function
         crate::log_function_execution(stringify!($func), $input.len(), duration);
+        result
     }};
 }

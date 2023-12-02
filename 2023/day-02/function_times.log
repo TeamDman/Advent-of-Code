@@ -1,0 +1,13 @@
+{"timestamp":1701548723,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":76526200}
+{"timestamp":1701548759,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":69143700}
+{"timestamp":1701548779,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":906600}
+{"timestamp":1701548807,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":906400}
+{"timestamp":1701548819,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":664500}
+{"timestamp":1701549204,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":1047000}
+{"timestamp":1701549204,"mode":"debug","function_name":"part2","input_length":10460,"duration_nanoseconds":924400}
+{"timestamp":1701549215,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":661500}
+{"timestamp":1701549215,"mode":"debug","function_name":"part2","input_length":10460,"duration_nanoseconds":587500}
+{"timestamp":1701549664,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":905400}
+{"timestamp":1701549664,"mode":"debug","function_name":"part2","input_length":10460,"duration_nanoseconds":737900}
+{"timestamp":1701549706,"mode":"release","function_name":"part1","input_length":10460,"duration_nanoseconds":374700}
+{"timestamp":1701549706,"mode":"release","function_name":"part2","input_length":10460,"duration_nanoseconds":338500}
