@@ -1,0 +1,4 @@
+{"timestamp":1701492177,"mode":"debug","function_name":"part1","input_length":21802,"time_nanoseconds":1347500}
+{"timestamp":1701492177,"mode":"debug","function_name":"part2","input_length":21802,"time_nanoseconds":2445800}
+{"timestamp":1701492205,"mode":"release","function_name":"part1","input_length":21802,"time_nanoseconds":67100}
+{"timestamp":1701492205,"mode":"release","function_name":"part2","input_length":21802,"time_nanoseconds":249100}
