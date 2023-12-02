@@ -12,7 +12,7 @@ macro_rules! time_function {
             mode: &'static str,
             function_name: &'static str,
             input_length: usize,
-            time_nanoseconds: u128,
+            duration_nanoseconds: u128,
         }
         
 
@@ -21,7 +21,7 @@ macro_rules! time_function {
             mode: if cfg!(debug_assertions) { "debug" } else { "release" },
             function_name: stringify!($func),
             input_length: $input.len(), // Works for both &str and String
-            time_nanoseconds: duration.as_nanos(),
+            duration_nanoseconds: duration.as_nanos(),
         };
 
         let log_message = serde_json::to_string(&log_data).expect("JSON serialization failed");
