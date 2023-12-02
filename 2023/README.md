@@ -2,9 +2,7 @@
 
 ## Day-01
 
-
-
-![execution time for day-01](day-01\day-01.png)
+![execution time for day-01](day-01/day-01.png)
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
