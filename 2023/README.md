@@ -24,5 +24,5 @@
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
-| Debug | 30.41 ms | 28.93 ms |
-| Release | 2.40 ms | 1.89 ms |
+| Debug | 34.94 ms | 30.91 ms |
+| Release | 2.18 ms | 1.71 ms |
