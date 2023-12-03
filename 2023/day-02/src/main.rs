@@ -110,11 +110,11 @@ mod tests {
         assert_eq!(part1(input), 2416);
     }
 
-    // #[test]
-    // fn test_part2() {
-    //     let input = include_str!("./input.txt");
-    //     assert_eq!(part2(input), 0);
-    // }
+    #[test]
+    fn test_part2() {
+        let input = include_str!("./input.txt");
+        assert_eq!(part2(input), 63307);
+    }
 
     #[test]
     fn part1_example() {

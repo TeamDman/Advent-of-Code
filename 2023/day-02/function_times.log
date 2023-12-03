@@ -55,3 +55,5 @@
 {"timestamp":1701549915,"mode":"debug","function_name":"part2","input_length":10460,"duration_nanoseconds":661400}
 {"timestamp":1701549915,"mode":"debug","function_name":"part1","input_length":10460,"duration_nanoseconds":632000}
 {"timestamp":1701549915,"mode":"debug","function_name":"part2","input_length":10460,"duration_nanoseconds":617700}
+{"timestamp":1701550536,"mode":"release","function_name":"part1","input_length":10460,"duration_nanoseconds":420800}
+{"timestamp":1701550536,"mode":"release","function_name":"part2","input_length":10460,"duration_nanoseconds":359800}
