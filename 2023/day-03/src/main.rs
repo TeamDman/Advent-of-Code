@@ -11,6 +11,7 @@ fn main() {
 }
 
 struct Input {
+    // (x, y) -> (x_start, y, number)
     numbers: HashMap<(isize, isize), (isize, isize, usize)>,
     symbols: HashMap<(isize, isize), char>,
 }

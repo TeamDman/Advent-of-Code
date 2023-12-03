@@ -7,3 +7,7 @@
 {"timestamp":1701644976,"mode":"debug","function_name":"part2","input_length":19878,"duration_nanoseconds":28928000}
 {"timestamp":1701644991,"mode":"release","function_name":"part1","input_length":19878,"duration_nanoseconds":2894400}
 {"timestamp":1701644991,"mode":"release","function_name":"part2","input_length":19878,"duration_nanoseconds":1749700}
+{"timestamp":1701645728,"mode":"release","function_name":"part1","input_length":19878,"duration_nanoseconds":2901300}
+{"timestamp":1701645728,"mode":"release","function_name":"part2","input_length":19878,"duration_nanoseconds":2254200}
+{"timestamp":1701645729,"mode":"release","function_name":"part1","input_length":19878,"duration_nanoseconds":2395300}
+{"timestamp":1701645729,"mode":"release","function_name":"part2","input_length":19878,"duration_nanoseconds":1892300}

@@ -16,4 +16,13 @@
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
 | Debug | 632.00 µs | 617.70 µs |
-| Release | 259.00 µs | 231.40 µs |
+| Release | 420.80 µs | 359.80 µs |
+
+## Day-03
+
+![execution time for day-03](day-03/day-03.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 30.41 ms | 28.93 ms |
+| Release | 2.40 ms | 1.89 ms |
