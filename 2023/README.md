@@ -24,5 +24,14 @@
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
-| Debug | 34.94 ms | 30.91 ms |
+| Debug | 30.54 ms | 32.04 ms |
 | Release | 2.18 ms | 1.71 ms |
+
+## Day-04
+
+![execution time for day-04](day-04/day-04.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 5.39 ms | 7.68 ms |
+| Release | 2.48 ms | 1.41 ms |

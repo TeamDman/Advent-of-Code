@@ -9,9 +9,11 @@ fn main() {
 }
 
 fn part1(input: &str) -> usize {
+    todo!()
 }
 
 fn part2(input: &str) -> usize {
+    todo!()
 }
 
 #[cfg(test)]
