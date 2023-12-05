@@ -97,14 +97,14 @@ fn apply_range_mappings(
 ) -> Vec<Range<usize>> {
     let mut inputs = vec![range];
     for (_chunk_name, chunk_list) in named_mapping_lists.iter() {
-        println!("Processing chunk: {}", _chunk_name);
+        // println!("Processing chunk: {}", _chunk_name);
         let mut chunk_inputs = inputs.clone();
         let mut chunk_unused: Vec<Range<usize>> = vec![];
         let mut chunk_results: Vec<Range<usize>> = vec![];
         for entry in chunk_list.iter() {
             for x in chunk_inputs.iter() {
                 let (unmapped, mapped) = entry.map_range(x.clone());
-                println!("chunk input {:?} became {:?}, {:?}", x.clone(), unmapped.clone(), mapped.clone());
+                // println!("chunk input {:?} became {:?}, {:?}", x.clone(), unmapped.clone(), mapped.clone());
                 chunk_unused.extend(unmapped);
                 chunk_results.extend(mapped);
             }

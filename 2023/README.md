@@ -35,3 +35,12 @@
 |--------|--------|--------|
 | Debug | 5.39 ms | 7.68 ms |
 | Release | 2.48 ms | 1.41 ms |
+
+## Day-05
+
+![execution time for day-05](day-05/day-05.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 167.80 µs | 619.70 µs |
+| Release | 72.10 µs | 379.60 µs |
