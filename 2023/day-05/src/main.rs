@@ -114,28 +114,6 @@ fn apply_range_mappings(
         inputs = [chunk_inputs, chunk_results].concat();
     }
     inputs
-    // maps.iter().fold(vec![range], |acc, (_, range_mapping_vec)| {
-    //     let mut result = Vec::new();
-
-    //     for range in acc {
-    //         if let Some((first, mapped)) = range_mapping_vec.iter()
-    //             .find_map(|range_mapping| {
-    //                 let mapped_ranges = range_mapping.map_range(range.clone());
-    //                 if mapped_ranges.len() > 1 || (mapped_ranges.len() == 1 && mapped_ranges[0] != range) {
-    //                     Some((range.clone(), mapped_ranges))
-    //                 } else {
-    //                     None
-    //                 }
-    //             }) {
-    //                 result.extend(mapped);
-    //                 break;
-    //             } else {
-    //                 result.push(range);
-    //             }
-    //     }
-
-    //     result
-    // })
 }
 
 fn part1(input: &str) -> usize {
