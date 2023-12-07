@@ -1,4 +1,5 @@
 use common::prelude::*;
+use itertools::Itertools;
 
 fn main() {
     let input = include_str!("./input.txt");
@@ -32,22 +33,17 @@ mod tests {
     //     assert_eq!(part2(input), 12345);
     // }
 
+    const EXAMPLE : &str = r#"
+"#;
+
     #[test]
     fn part1_example() {
-        let input = "";
-        assert_eq!(part1(input), 8);
+        assert_eq!(part1(EXAMPLE), 8);
     }
 
     // #[test]
     // fn part2_example() {
-    //     let input = "";
-
-    //     let line_answers = [48, 12, 1560, 630, 36];
-    //     input.lines().zip(line_answers.iter()).for_each(|(line, answer)| {
-    //         assert_eq!(part2(line), *answer, "Line: {}", line);
-    //     });
-
-    //     assert_eq!(part2(input), 2286);
+    //     assert_eq!(part2(EXAMPLE), 2286);
     // }
 
     // #[test]
