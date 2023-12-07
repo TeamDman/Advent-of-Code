@@ -21,43 +21,23 @@ fn part2(input: &str) -> usize {
 mod tests {
     use super::*;
 
-    // #[test]
-    // fn test_part1() {
-    //     let input = include_str!("./input.txt");
-    //     assert_eq!(part1(input), 12345);
-    // }
+    #[test]
+    fn test_part1() {
+        assert_eq!(part1(include_str!("./input.txt")), 12345);
+    }
 
-    // #[test]
-    // fn test_part2() {
-    //     let input = include_str!("./input.txt");
-    //     assert_eq!(part2(input), 12345);
-    // }
-
-    const EXAMPLE : &str = r#"
-"#;
+    #[test]
+    fn test_part2() {
+        assert_eq!(part2(include_str!("./input.txt")), 12345);
+    }
 
     #[test]
     fn part1_example() {
-        assert_eq!(part1(EXAMPLE), 8);
+        assert_eq!(part1(include_str!("./example.txt")), 288);
     }
 
-    // #[test]
-    // fn part2_example() {
-    //     assert_eq!(part2(EXAMPLE), 2286);
-    // }
-
-    // #[test]
-    // fn part1_badanswer() {
-    //     assert!(
-    //         part2(include_str!("./input.txt")) < 12345,
-    //         "Answer too high"
-    //     );
-    // }
-    // #[test]
-    // fn part2_badanswer() {
-    //     assert!(
-    //         part2(include_str!("./input.txt")) < 12345,
-    //         "Answer too high"
-    //     );
-    // }
+    #[test]
+    fn part2_example() {
+        assert_eq!(part2(include_str!("./example.txt")), 71503);
+    }
 }
