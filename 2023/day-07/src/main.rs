@@ -102,38 +102,21 @@ fn card_value(card: char) -> u8 {
 fn card_compare(a: &char, b: &char) -> Ordering {
     card_value(*a).cmp(&card_value(*b))
 }
-fn hand_order(
-    a_hand: &str,
-    a_bet: usize,
-    a_type: HandType,
-    b_hand: &str,
-    b_bet: usize,
-    b_type: HandType,
-) -> Ordering {
-    let x = a_type.cmp(&b_type);
-    if x != Ordering::Equal {
-        // better hand wins
-        return x;
+fn hand_order(a_hand: &str, a_type: HandType, b_hand: &str, b_type: HandType) -> Ordering {
+    if a_type != b_type {
+        // Compare based on hand type first
+        a_type.cmp(&b_type)
     } else {
         // tiebreak logic
-        let a_j_count = a_hand.chars().filter(|c| *c == 'Z').count();
-        let b_j_count = b_hand.chars().filter(|c| *c == 'Z').count();
-        let x = a_j_count.cmp(&b_j_count);
-        if x != Ordering::Equal {
-            // hand with fewer jokers wins
-            return x;
-        } else {
-            // same number of jokers
-            // hand with highest first different card wins
-            for (c_a, c_b) in a_hand.chars().zip(b_hand.chars()) {
-                let x = card_compare(&c_a, &c_b);
-                if x == Ordering::Equal {
-                    continue;
-                }
-                return x;
+        // hand with highest first different card wins
+        for (c_a, c_b) in a_hand.chars().zip(b_hand.chars()) {
+            let x = card_compare(&c_a, &c_b);
+            if x == Ordering::Equal {
+                continue;
             }
-            return Ordering::Equal;
+            return x;
         }
+        return Ordering::Equal;
     }
 }
 fn part1(input: &str) -> usize {
@@ -147,8 +130,8 @@ fn part1(input: &str) -> usize {
         )
     });
 
-    let hands_ranked = hands.sorted_by(|(a_hand, a_bet, a_type), (b_hand, b_bet, b_type)| {
-        hand_order(a_hand, *a_bet, *a_type, b_hand, *b_bet, *b_type)
+    let hands_ranked = hands.sorted_by(|(a_hand, _a_bet, a_type), (b_hand, _b_bet, b_type)| {
+        hand_order(a_hand, *a_type, b_hand, *b_type)
     });
     // println!("hands: {:?}", hands_ranked.clone().enumerate().map(|(i,v)| (i+1,v,(i+1) * v.1)).collect_vec());
 
@@ -172,9 +155,11 @@ fn part2_hand_sorter(input: &str) -> Vec<(String, usize, HandType)> {
             )
         })
         .collect::<Vec<_>>(); // Collect into a vector to sort later
-    rtn.par_sort_by(|(a_hand, a_bet, a_type), (b_hand, b_bet, b_type)| {
-        hand_order(a_hand, *a_bet, *a_type, b_hand, *b_bet, *b_type)
+    // dbg!(rtn.iter().map(|x| x.0.clone()).join("\n"));
+    rtn.par_sort_unstable_by(|(a_hand, _a_bet, a_type), (b_hand, _b_bet, b_type)| {
+        hand_order(a_hand, *a_type, b_hand, *b_type)
     });
+    // dbg!(rtn.iter().map(|x| x.0.clone()).join("\n"));
     rtn
 }
 
@@ -196,7 +181,7 @@ mod tests {
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(include_str!("./input.txt")), 0);
+        assert_eq!(part2(include_str!("./input.txt")), 248750248);
     }
 
     #[test]
@@ -266,7 +251,7 @@ mod tests {
             Ordering::Greater
         );
         assert_eq!(
-            part2(include_str!("./input.txt")).cmp(&249028421),
+            part2(include_str!("./input.txt")).cmp(&248805594),
             Ordering::Less
         );
     }
@@ -318,7 +303,29 @@ AAAAA";
             .map(|x| &x.0)
             .join("\n")
             .replace("Z", "J");
+        dbg!(ours
+            .lines()
+            .zip(part2_ordering.lines())
+            .filter(|(a, b)| a != b)
+            .map(|(a, b)| format!("{}!={}", a, b))
+            .join("\n"),);
         assert_eq!(ours, part2_ordering);
         assert_eq!(part2(input), 6839);
+    }
+
+    #[test]
+    fn reddit_example_2() {
+        let ours = "Q2KJJ\nT3Q33\nKTJJT\n2AAAA\n2JJJJ\nJAAAA";
+        let theirs = "T3Q33\nQ2KJJ\n2AAAA\nKTJJT\nJAAAA\n2JJJJ";
+        let calc = part2_hand_sorter(
+            ours.lines()
+                .map(|line| format!("{} 0", line))
+                .join("\n")
+                .as_str(),
+        )
+        .iter()
+        .map(|(hand, _bet, _hand_type)| hand.replace("Z", "J"))
+        .join("\n");
+        assert_eq!(calc, theirs);
     }
 }

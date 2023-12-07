@@ -53,3 +53,12 @@
 |--------|--------|--------|
 | Debug | 58.50 µs | 357.07 ms |
 | Release | 3.70 µs | 26.32 ms |
+
+## Day-07
+
+![execution time for day-07](day-07/day-07.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 2.19 ms | 3.84 ms |
+| Release | 886.20 µs | 1.67 ms |
