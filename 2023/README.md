@@ -44,3 +44,12 @@
 |--------|--------|--------|
 | Debug | 167.80 µs | 619.70 µs |
 | Release | 85.30 µs | 317.10 µs |
+
+## Day-06
+
+![execution time for day-06](day-06/day-06.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 58.50 µs | 357.07 ms |
+| Release | 3.70 µs | 26.32 ms |
