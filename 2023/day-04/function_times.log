@@ -12,3 +12,7 @@
 {"timestamp":1701703044,"mode":"debug","function_name":"part2","input_length":22418,"duration_nanoseconds":7675700}
 {"timestamp":1701703047,"mode":"release","function_name":"part1","input_length":22418,"duration_nanoseconds":2477900}
 {"timestamp":1701703047,"mode":"release","function_name":"part2","input_length":22418,"duration_nanoseconds":1410400}
+{"timestamp":1701921975,"mode":"debug","function_name":"part1","input_length":22418,"duration_nanoseconds":6545700}
+{"timestamp":1701921975,"mode":"debug","function_name":"part2","input_length":22418,"duration_nanoseconds":5761300}
+{"timestamp":1701921977,"mode":"release","function_name":"part1","input_length":22418,"duration_nanoseconds":1194900}
+{"timestamp":1701921977,"mode":"release","function_name":"part2","input_length":22418,"duration_nanoseconds":1033300}

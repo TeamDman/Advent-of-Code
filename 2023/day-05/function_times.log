@@ -11,3 +11,5 @@
 {"timestamp":1701795445,"mode":"debug","function_name":"part2","input_length":4133,"duration_nanoseconds":619700}
 {"timestamp":1701795448,"mode":"release","function_name":"part1","input_length":4133,"duration_nanoseconds":72100}
 {"timestamp":1701795448,"mode":"release","function_name":"part2","input_length":4133,"duration_nanoseconds":379600}
+{"timestamp":1701921985,"mode":"release","function_name":"part1","input_length":4133,"duration_nanoseconds":85300}
+{"timestamp":1701921985,"mode":"release","function_name":"part2","input_length":4133,"duration_nanoseconds":317100}

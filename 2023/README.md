@@ -24,8 +24,8 @@
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
-| Debug | 30.54 ms | 32.04 ms |
-| Release | 2.18 ms | 1.71 ms |
+| Debug | 32.51 ms | 28.84 ms |
+| Release | 2.01 ms | 1.58 ms |
 
 ## Day-04
 
@@ -33,8 +33,8 @@
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
-| Debug | 5.39 ms | 7.68 ms |
-| Release | 2.48 ms | 1.41 ms |
+| Debug | 6.55 ms | 5.76 ms |
+| Release | 1.19 ms | 1.03 ms |
 
 ## Day-05
 
@@ -43,4 +43,4 @@
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
 | Debug | 167.80 µs | 619.70 µs |
-| Release | 72.10 µs | 379.60 µs |
+| Release | 85.30 µs | 317.10 µs |

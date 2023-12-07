@@ -39,3 +39,7 @@
 {"timestamp":1701645841,"mode":"debug","function_name":"part2","input_length":19878,"duration_nanoseconds":30909700}
 {"timestamp":1701645861,"mode":"debug","function_name":"part1","input_length":19878,"duration_nanoseconds":30535800}
 {"timestamp":1701645861,"mode":"debug","function_name":"part2","input_length":19878,"duration_nanoseconds":32040900}
+{"timestamp":1701921967,"mode":"debug","function_name":"part1","input_length":19878,"duration_nanoseconds":32508200}
+{"timestamp":1701921967,"mode":"debug","function_name":"part2","input_length":19878,"duration_nanoseconds":28842900}
+{"timestamp":1701921970,"mode":"release","function_name":"part1","input_length":19878,"duration_nanoseconds":2010900}
+{"timestamp":1701921970,"mode":"release","function_name":"part2","input_length":19878,"duration_nanoseconds":1580200}
