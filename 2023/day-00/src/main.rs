@@ -1,5 +1,7 @@
 use common::prelude::*;
 use itertools::Itertools;
+use rayon::str::ParallelString;
+use rayon::iter::ParallelIterator;
 
 fn main() {
     let input = include_str!("./input.txt");
@@ -23,21 +25,21 @@ mod tests {
 
     #[test]
     fn test_part1() {
-        assert_eq!(part1(include_str!("./input.txt")), 12345);
+        assert_eq!(part1(include_str!("./input.txt")), 0);
     }
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(include_str!("./input.txt")), 12345);
+        assert_eq!(part2(include_str!("./input.txt")), 0);
     }
 
     #[test]
     fn part1_example() {
-        assert_eq!(part1(include_str!("./example.txt")), 288);
+        assert_eq!(part1(include_str!("./example.txt")), 0);
     }
 
     #[test]
     fn part2_example() {
-        assert_eq!(part2(include_str!("./example.txt")), 71503);
+        assert_eq!(part2(include_str!("./example.txt")), 0);
     }
 }
