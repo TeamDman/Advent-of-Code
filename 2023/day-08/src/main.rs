@@ -87,11 +87,16 @@ fn part1(input: &str) -> usize {
 
 fn part2(input: &str) -> usize {
     let mut lines = input.lines();
-    let pattern = lines.next().unwrap().chars().map(|c| match c {
-        'R' => Direction::Right,
-        'L' => Direction::Left,
-        _ => panic!("bad input: {}", c),
-    }).collect_vec();
+    let pattern = lines
+        .next()
+        .unwrap()
+        .chars()
+        .map(|c| match c {
+            'R' => Direction::Right,
+            'L' => Direction::Left,
+            _ => panic!("bad input: {}", c),
+        })
+        .collect_vec();
     let lookup = lines
         .skip(1)
         .map(|line| {
@@ -102,26 +107,50 @@ fn part2(input: &str) -> usize {
         })
         .collect::<HashMap<&str, (&str, &str)>>();
 
-    
-        let mut current_nodes: HashSet<&str> = lookup.keys()
-        .filter(|&k| k.ends_with("A"))
-        .cloned()
+    let all_endings: Vec<HashSet<usize>> = lookup
+        .keys()
+        .filter(|k| k.ends_with("A"))
+        .par_bridge()
+        .map(|start| {
+            let mut current = *start;
+            let mut steps = 0;
+            let mut visited = HashSet::new();
+            let mut endings = HashSet::new();
+            'outer: loop {
+                for (i, dir) in pattern.clone().enumerate() {
+                    if visited.contains(&(i, current, dir)) {
+                        break 'outer;
+                    } else {
+                        visited.insert((i, current, dir));
+                    }
+                    if let Some(&(left, right)) = lookup.get(current) {
+                        let next = dir.choose(left, right);
+                        current = next;
+                    } else {
+                        panic!("lookup key missing: {}", current);
+                    }
+                    steps += 1;
+                    if current.ends_with("Z") {
+                        endings.insert(steps);
+                    }
+                }
+            }
+            endings
+        })
         .collect();
-
-    let mut steps = 0;
-    while current_nodes.iter().any(|node| !node.ends_with("Z")) {
-        let dir = pattern[steps % pattern.len()];
-        current_nodes = current_nodes.iter()
-            .flat_map(|&node| {
-                let (left, right) = lookup.get(node).expect("Node not found in lookup");
-                let next_node = dir.choose(left, right);
-                Some(next_node)
-            })
-            .collect();
-        steps += 1;
-    }
-
-    steps
+    println!("{:?}", all_endings);
+    let samezies = all_endings
+        .iter()
+        .fold(all_endings.first().unwrap().clone(), |acc, x| {
+            acc.intersection(x).map(|x| *x).collect()
+        });
+    println!("{:?}", samezies);
+    samezies.iter().min().map(|x| *x).unwrap_or_else(|| {
+        all_endings
+            .par_iter()
+            .map(|x| x.iter().min().unwrap())
+            .product::<usize>()
+    })
 }
 
 #[cfg(test)]
