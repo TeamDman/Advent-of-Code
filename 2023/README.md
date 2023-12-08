@@ -62,3 +62,12 @@
 |--------|--------|--------|
 | Debug | 2.19 ms | 3.84 ms |
 | Release | 886.20 µs | 1.67 ms |
+
+## Day-08
+
+![execution time for day-08](day-08/day-08.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 17.83 ms | 89.02 ms |
+| Release | 3.27 ms | 12.82 ms |
