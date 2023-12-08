@@ -2,8 +2,7 @@ use std::collections::{HashMap, HashSet};
 
 use common::prelude::*;
 use itertools::Itertools;
-use rayon::iter::{IntoParallelRefIterator, ParallelBridge, ParallelIterator};
-use rayon::str::ParallelString;
+use num_integer::lcm;
 
 fn main() {
     let input = include_str!("./input.txt");
@@ -13,66 +12,25 @@ fn main() {
     println!("Part 2: {}", result);
 }
 
-#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq, PartialOrd, Ord)]
-enum Direction {
-    Left,
-    Right,
-}
-
-trait Picker {
-    fn choose<'a>(self: Self, left: &'a str, right: &'a str) -> &'a str;
-}
-
-impl Picker for Direction {
-    fn choose<'a>(self: Self, left: &'a str, right: &'a str) -> &'a str {
-        match self {
-            Self::Left => left,
-            Self::Right => right,
-        }
-    }
-}
-
 fn part1(input: &str) -> usize {
-    let mut lines = input.lines();
-    // println!("first: {}", lines.clone().next().unwrap());
-    let pattern = lines.next().unwrap().chars().map(|c| match c {
-        'R' => Direction::Right,
-        'L' => Direction::Left,
-        _ => panic!("bad input: {}", c),
-    });
-    // println!("pattern: {:?}", pattern.clone());
-    let lookup = lines
-        .skip(1)
-        .map(|line| {
-            let name = &line[0..3];
-            let left = &line[7..10];
-            let right = &line[12..15];
-            // println!("got {}=({},{})", name, left, right);
-            (name, (left, right))
-        })
-        .collect::<HashMap<&str, (&str, &str)>>();
-    // println!("Lookup built with {} entries", lookup.keys().count());
+    let pattern = parse_pattern(input);
+    let lookup = parse_lookup(input);
 
     let mut current = "AAA";
     let mut steps = 0;
     let mut visited = HashSet::new();
     loop {
-        for (i, dir) in pattern.clone().enumerate() {
+        for (i, dir) in pattern.iter().enumerate() {
             if visited.contains(&(i, current, dir)) {
                 panic!("already visited ({}, {},{:?})", i, current, &dir);
             } else {
                 visited.insert((i, current, dir));
             }
             if let Some(&(left, right)) = lookup.get(current) {
-                let next = dir.choose(left, right);
-                // println!(
-                //     "{} = ({}, {}), going {:?} ({})",
-                //     current,
-                //     left,
-                //     right,
-                //     &dir,
-                //     next
-                // );
+                let next = match dir {
+                    Direction::Left => left,
+                    Direction::Right => right,
+                };
                 current = next;
             } else {
                 panic!("lookup key missing: {}", current);
@@ -85,9 +43,30 @@ fn part1(input: &str) -> usize {
     }
 }
 
-fn part2(input: &str) -> usize {
-    let mut lines = input.lines();
-    let pattern = lines
+fn part2(input: &str) -> i128 {
+    let pattern = parse_pattern(input);
+    let lookup = parse_lookup(input);
+    println!("parse complete");
+
+    let path_infos: Vec<_> = lookup.keys()
+        .filter(|k| k.ends_with("A"))
+        .map(|start_node| track_path(&lookup, &pattern, start_node))
+        .collect();
+
+    println!("got path infos: {:?}", path_infos);
+
+    calculate_alignment_step(path_infos)
+}
+
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq, PartialOrd, Ord)]
+enum Direction {
+    Left,
+    Right,
+}
+
+fn parse_pattern(input: &str) -> Vec<Direction> {
+    input
+        .lines()
         .next()
         .unwrap()
         .chars()
@@ -96,62 +75,60 @@ fn part2(input: &str) -> usize {
             'L' => Direction::Left,
             _ => panic!("bad input: {}", c),
         })
-        .collect_vec();
-    let lookup = lines
-        .skip(1)
+        .collect_vec()
+}
+fn parse_lookup(input: &str) -> HashMap<&str, (&str, &str)> {
+    input
+        .lines()
+        .skip(2)
         .map(|line| {
             let name = &line[0..3];
             let left = &line[7..10];
             let right = &line[12..15];
             (name, (left, right))
         })
-        .collect::<HashMap<&str, (&str, &str)>>();
-
-    let all_endings: Vec<HashSet<usize>> = lookup
-        .keys()
-        .filter(|k| k.ends_with("A"))
-        .par_bridge()
-        .map(|start| {
-            let mut current = *start;
-            let mut steps = 0;
-            let mut visited = HashSet::new();
-            let mut endings = HashSet::new();
-            'outer: loop {
-                for (i, dir) in pattern.clone().enumerate() {
-                    if visited.contains(&(i, current, dir)) {
-                        break 'outer;
-                    } else {
-                        visited.insert((i, current, dir));
-                    }
-                    if let Some(&(left, right)) = lookup.get(current) {
-                        let next = dir.choose(left, right);
-                        current = next;
-                    } else {
-                        panic!("lookup key missing: {}", current);
-                    }
-                    steps += 1;
-                    if current.ends_with("Z") {
-                        endings.insert(steps);
-                    }
-                }
-            }
-            endings
-        })
-        .collect();
-    println!("{:?}", all_endings);
-    let samezies = all_endings
-        .iter()
-        .fold(all_endings.first().unwrap().clone(), |acc, x| {
-            acc.intersection(x).map(|x| *x).collect()
-        });
-    println!("{:?}", samezies);
-    samezies.iter().min().map(|x| *x).unwrap_or_else(|| {
-        all_endings
-            .par_iter()
-            .map(|x| x.iter().min().unwrap())
-            .product::<usize>()
-    })
+        .collect()
 }
+
+/// Identify the cycle length and the steps to get to each z-ending
+fn track_path(
+    lookup: &HashMap<&str, (&str, &str)>,
+    pattern: &[Direction],
+    start_node: &str,
+) -> (usize, HashSet<usize>) {
+    let mut current = start_node;
+    let mut step = 0;
+    let mut visited = HashSet::new();
+    let mut endings = HashSet::new();
+    'outer: loop {
+        for (i, dir) in pattern.iter().enumerate() {
+            if visited.contains(&(i, current, dir)) {
+                break 'outer;
+            } else {
+                visited.insert((i, current, dir));
+            }
+            if let Some(&(left, right)) = lookup.get(current) {
+                let next = match pattern[step % pattern.len()] {
+                    Direction::Left => left,
+                    Direction::Right => right,
+                };
+                current = next;
+            } else {
+                panic!("lookup key missing: {}", current);
+            }
+            step += 1;
+            if current.ends_with("Z") {
+                endings.insert(step);
+            }
+        }
+    }
+    (step, endings)
+}
+
+fn calculate_alignment_step(path_infos: Vec<(usize, HashSet<usize>)>) -> i128 {
+    path_infos.iter().flat_map(|x| x.1.iter()).map(|x| *x as i128).reduce(lcm).unwrap()
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -164,7 +141,7 @@ mod tests {
 
     #[test]
     fn test_part2() {
-        assert_eq!(part2(include_str!("./input.txt")), 0);
+        assert_eq!(part2(include_str!("./input.txt")), 14616363770447);
     }
 
     #[test]
