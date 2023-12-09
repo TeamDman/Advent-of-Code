@@ -71,3 +71,12 @@
 |--------|--------|--------|
 | Debug | 17.83 ms | 89.02 ms |
 | Release | 3.27 ms | 12.82 ms |
+
+## Day-09
+
+![execution time for day-09](day-09/day-09.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 2.78 ms | 2.80 ms |
+| Release | 469.40 µs | 446.20 µs |

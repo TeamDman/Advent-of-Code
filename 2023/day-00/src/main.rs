@@ -24,22 +24,22 @@ mod tests {
     use super::*;
 
     #[test]
+    fn part1_example() {
+        assert_eq!(part1(include_str!("./example.txt")), 0);
+    }
+    #[test]
     fn test_part1() {
         assert_eq!(part1(include_str!("./input.txt")), 0);
+    }
+
+
+    #[test]
+    fn part2_example() {
+        assert_eq!(part2(include_str!("./example.txt")), 0);
     }
 
     #[test]
     fn test_part2() {
         assert_eq!(part2(include_str!("./input.txt")), 0);
-    }
-
-    #[test]
-    fn part1_example() {
-        assert_eq!(part1(include_str!("./example.txt")), 0);
-    }
-
-    #[test]
-    fn part2_example() {
-        assert_eq!(part2(include_str!("./example.txt")), 0);
     }
 }
