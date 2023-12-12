@@ -80,3 +80,12 @@
 |--------|--------|--------|
 | Debug | 2.78 ms | 2.80 ms |
 | Release | 469.40 µs | 446.20 µs |
+
+## Day-10
+
+![execution time for day-10](day-10/day-10.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 33.48 ms | 409.67 ms |
+| Release | 5.23 ms | 94.72 ms |

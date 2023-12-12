@@ -25,6 +25,7 @@ enum Tile {
     SouthEast = 'F' as isize,
     SouthWest = '7' as isize,
     Ground = '.' as isize,
+    Flooded = 'X' as isize,
 }
 
 impl Tile {
@@ -38,6 +39,7 @@ impl Tile {
             Tile::SouthWest => Some([(0, 1), (-1, 0)].into_iter()),
             Tile::Ground => None,
             Tile::Start => None,
+            Tile::Flooded => None,
         }
     }
     fn iter_pipes() -> impl Iterator<Item = Tile> {
@@ -50,6 +52,9 @@ impl Tile {
             Tile::SouthWest,
         ]
         .into_iter()
+    }
+    fn char(&self) -> char {
+        *self as u8 as char
     }
 }
 
@@ -190,111 +195,108 @@ fn part1(input: &str) -> usize {
     path.len() / 2
 }
 
-// https://www.reddit.com/r/adventofcode/comments/18eza5g/2023_day_10_animated_visualization/
-enum BlueArrow {
-    Up,
-    Down,
-}
-
 fn part2(input: &str) -> usize {
     let data = parse_data(input);
-    let path = trace_loop(&data);
-    let path_steps: HashMap<(isize, isize), usize> = path.into_iter().collect();
-    let arrows: HashMap<&(isize, isize), BlueArrow> = path_steps
-        .iter()
-        .map(|(pos, step)| {
-            let tile = data.grid.get(pos).unwrap();
-            if tile.offsets().unwrap().any(|(_x, y)| y != 0) {
-                // this tile connects vertically somehow
-                // did we come from above or below?
-                // let steps_at_above = path_steps.get(&(pos.0, pos.1 - 1)).unwrap_or(&0);
-                let steps_at_below = path_steps.get(&(pos.0, pos.1 + 1)).unwrap_or(&0);
-                if steps_at_below + 1 == *step {
-                    return Some((pos, BlueArrow::Up))
-                } else if *steps_at_below == *step + 1{
-                    return Some((pos, BlueArrow::Down))
-                }
-            }
-            return None
-        })
-        .filter(Option::is_some)
-        .map(Option::unwrap)
-        .collect();
+    let path: HashMap<(isize, isize), usize> = trace_loop(&data).into_iter().collect();
+
+    // let's make a bigger (3x) version of the map
+    // each tile will get expanded
+    // L would become
+    //
+    // . | .
+    // . L -
+    // . . .
 
     let (min_x, min_y, max_x, max_y) = data.bounds();
-
-    // print map and show arrows
-    let display = data
-        .grid
-        .clone()
-        .into_iter()
-        .map(|((x, y), tile)| {
-            if let Some(arrow)= arrows.get(&(x,y)) {
-                match arrow {
-                    BlueArrow::Up => ((x,y),'^'),
-                    BlueArrow::Down => ((x,y),'v'),
+    let mut grid: HashMap<(isize, isize), Tile> = HashMap::new();
+    for (pos, tile) in path.keys().map(|k| (k,data.grid.get(k).unwrap())) {
+        let (x, y) = *pos;
+        let (x, y) = (x * 3, y * 3);
+        grid.insert((x, y), *tile);
+        tile.offsets().unwrap().for_each(|(dx, dy)| {
+            match dx {
+                1 => {
+                    grid.insert((x + 1, y), Tile::EastWest);
                 }
-            } else {
-                ((x, y), tile as u8 as char)
+                -1 => {
+                    grid.insert((x - 1, y), Tile::EastWest);
+                }
+                _ => {}
             }
-        })
-        .collect::<HashMap<_, _>>();
-    for y in min_y..=max_y {
-        for x in min_x..=max_x {
-            print!("{}", display.get(&(x, y)).unwrap());
-        }
-        println!();
-    }
-       
-    let mut found: HashSet<(isize, isize)> = HashSet::new();
-    let mut winding: i32 = 0;
-    for y in min_y..=max_y {
-        for x in min_x..=max_x {
-            match arrows.get(&(x,y)) {
-                Some(BlueArrow::Up) => {
-                    winding += 1;
+            match dy {
+                1 => {
+                    grid.insert((x, y + 1), Tile::NorthSouth);
                 }
-                Some(BlueArrow::Down) => {
-                    winding -= 1;
+                -1 => {
+                    grid.insert((x, y - 1), Tile::NorthSouth);
                 }
-                None => {
-                }
+                _ => {}
             }
-            assert!(winding.abs() < 2);
-            if !path_steps.contains_key(&(x, y)) && !(winding >= 0) {
-                // println!("Found enclosed point: {:?}", (x, y));
-                found.insert((x, y));
-            }
-        }
+        });
     }
 
-    println!();
-    // print map where the found tiles have been replaced with the character 'I'
-    let display = data
-        .grid
-        .clone()
-        .into_iter()
-        .map(|((x, y), tile)| {
-            if found.contains(&(x, y)) {
-                ((x, y), 'I')
-            } else if let Some(arrow)= arrows.get(&(x,y)) {
-                match arrow {
-                    BlueArrow::Up => ((x,y),'^'),
-                    BlueArrow::Down => ((x,y),'v'),
-                }
-            } else {
-                ((x, y), tile as u8 as char)
+    // fill defaults and display the map
+    for y in min_y * 3..=max_y * 3 {
+        for x in min_x * 3..=max_x * 3 {
+            if !grid.contains_key(&(x, y)) {
+                grid.insert((x, y), Tile::Ground);
             }
-        })
-        .collect::<HashMap<_, _>>();
-    for y in min_y..=max_y {
-        for x in min_x..=max_x {
-            print!("{}", display.get(&(x, y)).unwrap());
+            // print!(
+            //     "{}",
+            //     grid.get(&(x, y)).unwrap().char()
+            // );
         }
-        println!();
+        // println!();
     }
 
-    found.len()
+    // now we flood fill starting from -1, 0 (outside)
+    // update the map with an X for each tile that is visited
+    let mut visited = HashSet::new();
+    let mut queue = VecDeque::new();
+    // we want to start from all positions out of bounds of the original map
+    for x in min_x * 3..=max_x * 3 {
+        queue.push_back((x, min_y * 3 - 1));
+        queue.push_back((x, max_y * 3 + 1));
+    }
+    for y in min_y * 3..=max_y * 3 {
+        queue.push_back((min_x * 3 - 1, y));
+        queue.push_back((max_x * 3 + 1, y));
+    }
+    while let Some(pos) = queue.pop_front() {
+        if visited.contains(&pos) {
+            continue;
+        }
+        visited.insert(pos);
+        [(-1,0),(1,0),(0,1),(0,-1)].iter().for_each(|(dx, dy)| {
+            match grid.get(&(pos.0 + dx, pos.1 + dy)) {
+                Some(Tile::Ground) => {
+                    grid.insert((pos.0 + dx, pos.1 + dy), Tile::Flooded);
+                    queue.push_back((pos.0 + dx, pos.1 + dy));
+                }
+                _ => {}
+            }
+        });
+    }
+
+    // display the flooded map
+    // println!();
+    // for y in min_y * 3..=max_y * 3 {
+    //     for x in min_x * 3..=max_x * 3 {
+    //         print!(
+    //             "{}",
+    //             grid.get(&(x, y)).unwrap().char()
+    //         );
+    //     }
+    //     println!();
+    // }
+
+    // count the non-flooded tiles
+    data.grid.iter().filter(|(pos, _tile)| {
+        match grid.get(&(pos.0*3, pos.1*3)) {
+            Some(Tile::Ground) => true,
+            _ => false,
+        }
+    }).count()
 }
 
 #[cfg(test)]
