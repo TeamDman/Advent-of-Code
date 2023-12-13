@@ -1,0 +1,5 @@
+{"timestamp":1702498328,"mode":"debug","function_name":"part1","input_length":19739,"duration_nanoseconds":11332900}
+{"timestamp":1702498943,"mode":"debug","function_name":"part1","input_length":19739,"duration_nanoseconds":8836300}
+{"timestamp":1702498943,"mode":"debug","function_name":"part2","input_length":19739,"duration_nanoseconds":9556400}
+{"timestamp":1702498985,"mode":"release","function_name":"part1","input_length":19739,"duration_nanoseconds":2223900}
+{"timestamp":1702498985,"mode":"release","function_name":"part2","input_length":19739,"duration_nanoseconds":401700}
