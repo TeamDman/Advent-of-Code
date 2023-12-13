@@ -88,4 +88,13 @@
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
 | Debug | 33.48 ms | 409.67 ms |
-| Release | 5.23 ms | 94.72 ms |
+| Release | 5.57 ms | 115.80 ms |
+
+## Day-11
+
+![execution time for day-11](day-11/day-11.png)
+
+| Mode | Part 1 | Part 2 |
+|--------|--------|--------|
+| Debug | 8.84 ms | 9.56 ms |
+| Release | 2.22 ms | 401.70 µs |
