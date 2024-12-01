@@ -6,5 +6,5 @@
 
 | Mode | Part 1 | Part 2 |
 |--------|--------|--------|
-| Debug | 2.29 ms | 2.51 ms |
-| Release | 946.80 µs | 631.30 µs |
+| Debug | 2.46 ms | 2.54 ms |
+| Release | 1.07 ms | 616.40 µs |
