@@ -1,0 +1,1 @@
+Chugging through it with AI; taking the challenge as an integration and procedure problem rather than the contents of the challenges themselves being a personal skill test.
